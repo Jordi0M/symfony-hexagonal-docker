@@ -1,0 +1,13 @@
+web_controllers:
+  resource: ../src/UI/Web/
+  type: annotation
+  prefix: /
+
+api_controllers:
+  resource: ../src/UI/ApiRest/Controller/
+  type: annotation
+  prefix: /api
+
+kernel:
+  resource: ../src/Infrastructure/Kernel.php
+  type: annotation

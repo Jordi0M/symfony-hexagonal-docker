@@ -1,0 +1,37 @@
+version: '3.5'
+
+networks:
+  default:
+    name: ${EXTERNAL_NET}
+    external: true
+
+services:
+  testapi:
+    container_name: testapi
+    environment:
+      - VIRTUAL_HOST=${HTTP_WEB_URL}
+    build:
+      context: etc/nginx
+      args:
+        USER: ${USER}
+        USER_ID: ${USER_ID}
+    ports:
+      - ${HTTP_WEB_PORT}:80
+    #      - '443:443'
+    restart: on-failure
+    volumes:
+      - .:/web
+    depends_on:
+      - testapi-php
+
+  testapi-php:
+    container_name: testapi-php
+    build:
+      context: ./
+      dockerfile: etc/php/Dockerfile
+      args:
+        USER: ${USER}
+        USER_ID: ${USER_ID}
+    restart: on-failure
+    volumes:
+      - .:/web

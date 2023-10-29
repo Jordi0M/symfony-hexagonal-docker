@@ -1,0 +1,46 @@
+###> IDE (SublimeText, Eclipse, Zend Studio, Netbeans, PHPStorm, TextMate2, Visual Studio Code) ###
+Capfile
+.buildpath
+/.idea/
+nbproject
+.project
+.settings
+.sublime-project
+TextMate2
+.vscode
+**/.DS_Store
+###< IDE ###
+
+
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*
+/.env
+!/.env.example
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/*
+!/var/sql
+/var/sql/*
+!/var/sql/.gitkeep
+/vendor/
+/bin/*
+!/bin/console
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+
+###> symfony/phpunit-bridge ###
+public/codecoverage/*
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+
+composer.lock
+symfony.lock

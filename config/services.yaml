@@ -1,0 +1,66 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+        bind:
+    #            $emWriter: '@doctrine.orm.writer_entity_manager'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Domain/DependencyInjection/'
+            - '../src/Domain/Entity/'
+            - '../src/Domain/Exceptions/'
+            - '../src/Domain/ValueObj/'
+            - '../src/Infrastructure/Kernel.php'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+
+    # Application
+
+    query_handlers:
+        namespace: App\Application\Query\
+        resource: '%kernel.project_dir%/src/Application/Query/**/*QueryHandler.php'
+        public: true
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
+
+    command_handlers:
+        namespace: App\Application\Command\
+        resource: '%kernel.project_dir%/src/Application/Command/**/*CommandHandler.php'
+        public: true
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+
+
+    # Infrastructure
+
+    Monolog\Processor\UidProcessor:
+        tags:
+            - { name: monolog.processor, channel: testapi }
+
+    App\Infrastructure\Symfony\EventSubscriber\RequestLoggerSubscriber:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request' }
+            - { name: monolog.logger, channel: testapi }
+
+    App\Infrastructure\Symfony\EventSubscriber\ResponseLoggerSubscriber:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.response' }
+            - { name: monolog.logger, channel: testapi }
